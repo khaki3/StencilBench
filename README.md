@@ -2,4 +2,4 @@
 
 ## References
 - https://github.com/pssrawat/IEEE2017
-# StencilBench
+- https://github.com/pssrawat/ppopp-artifact

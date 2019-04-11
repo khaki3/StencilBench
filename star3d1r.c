@@ -7,16 +7,18 @@
 double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
 {
   double start_time = sb_time(), end_time = 0.0;
-  int dimsize = compsize + BENCH_RAD * 2;
+  #define timestep 1000
+  #define compsize 512
+  #define dimsize (compsize + BENCH_RAD * 2)
   SB_TYPE (*A)[dimsize][dimsize][dimsize]
     = (SB_TYPE (*)[dimsize][dimsize][dimsize])A1;
 
   if (scop) {
 #pragma scop
     for (int t = 0; t < timestep; t++)
-      for (int i = BENCH_RAD; i < dimsize - BENCH_RAD; i++)
-        for (int j = BENCH_RAD; j < dimsize - BENCH_RAD; j++)
-          for (int k = BENCH_RAD; k < dimsize - BENCH_RAD; k++)
+      for (int i = BENCH_RAD; i < compsize + BENCH_RAD; i++)
+        for (int j = BENCH_RAD; j < compsize + BENCH_RAD; j++)
+          for (int k = BENCH_RAD; k < compsize + BENCH_RAD; k++)
             A[(t+1)%2][i][j][k] =
               0.2500f * A[t%2][i][j][k] + 
               0.1248f * A[t%2][i-1][j][k] + 0.1249f * A[t%2][i+1][j][k] +
@@ -27,9 +29,9 @@ double kernel_stencil(SB_TYPE *A1, int compsize, int timestep, bool scop)
   else {
     for (int t = 0; t < timestep; t++)
 #pragma omp parallel for
-      for (int i = BENCH_RAD; i < dimsize - BENCH_RAD; i++)
-        for (int j = BENCH_RAD; j < dimsize - BENCH_RAD; j++)
-          for (int k = BENCH_RAD; k < dimsize - BENCH_RAD; k++)
+      for (int i = BENCH_RAD; i < compsize + BENCH_RAD; i++)
+        for (int j = BENCH_RAD; j < compsize + BENCH_RAD; j++)
+          for (int k = BENCH_RAD; k < compsize + BENCH_RAD; k++)
             A[(t+1)%2][i][j][k] =
               0.2500f * A[t%2][i][j][k] + 
               0.1248f * A[t%2][i-1][j][k] + 0.1249f * A[t%2][i+1][j][k] +

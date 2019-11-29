@@ -40,15 +40,15 @@ COMPILE ()
 
             echo $outpath
 
-        TMPDIR="$(mktemp -d)"
-        cp common.h $TMPDIR
-        cp $input $TMPDIR/src.c
-        cd $TMPDIR
+        TEMP="$(mktemp -d)"
+        cp common.h $TEMP
+        cp $input $TEMP/src.c
+        cd $TEMP
         ppcg -D SB_TYPE=$sb_type $ppcg_option src.c
         nvcc $regopt -D SB_TYPE=$sb_type $nvcc_option src_*.cu 2>/dev/null
         cd -
-        cp $TMPDIR/a.out $outpath
-        rm -rf $TMPDIR
+        cp $TEMP/a.out $outpath
+        rm -rf $TEMP
         done
     done
 }

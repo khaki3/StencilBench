@@ -26,12 +26,12 @@ run ()
     fi
 
     echo @@@ $bin @@@
-    ./$bin -s $size -t 1000 -n 5
+    $bin -s $size -t 1000 -n 5
 }
 
 {
     for i in $(ls bin_hybrid/ | grep $GPUNAME) ; do
-        run $i
+        run ./bin_hybrid/$i
     done
 } | tee hybrid.log
 
@@ -43,6 +43,6 @@ done
 
 {
     for i in $(ls bin_ppcg/) ; do
-        run $i
+        run ./bin_ppcg/$i;
     done
 } | tee loop_tiling.log
